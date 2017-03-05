@@ -3,6 +3,8 @@ import nltk
 import re
 from nltk.tokenize import TweetTokenizer
 from collections import Counter
+import tools
+import codecs
 import math
 
 ######################################################### FUNCTIONS #########################################################
@@ -96,9 +98,11 @@ def estimateSentenceTrigramsProbabilityLS(sentence, trigramed_sentence, unigrams
 
 #Load Corpus and compute total bigrams
 print ("Loading Corpus")
-corpus = open('europarliamentENG.en', 'r').read()
+# corpus = open('europarliamentENG.en', 'r').read()
+corpus = codecs.open(r'C:\Users\Konstantinos\Documents\GitHub\NLP\Corpus\europarl-v7.fr-en.en', 'r', encoding='utf-8', errors='ignore').read()
+corpus = tools.remove_punc(corpus)
 tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
-tokenized_corpus = tknzr.tokenize(corpus[0:100000])
+tokenized_corpus = tknzr.tokenize(corpus[0:10000])
 
 #Replace words that appear less than 10 times in corpus
 temp_counter = Counter(tokenized_corpus)
