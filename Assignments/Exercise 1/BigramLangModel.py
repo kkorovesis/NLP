@@ -1,10 +1,7 @@
 ######################################################### IMPORTS #########################################################
-import nltk
-import re
+import nltk, re, codecs, tools,  math
 from nltk.tokenize import TweetTokenizer
 from collections import Counter
-import codecs
-import tools
 
 import math
 
@@ -15,10 +12,14 @@ def split_sequence(sequence, words):
     return words
 
 def calculateUnigramProbLS(unigram, tokenized_corpus,  V):
-    return ((tokenized_corpus.count(unigram) + 1)/(len(tokenized_corpus) + V))
+    # return ((tokenized_corpus.count(unigram) + 1)/(len(tokenized_corpus) + V))
+    return ((math.log(tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V)))
+
+
 
 def calculateBigramProbLS(bigram, final_corpus, final_corpus_bigrams, V):
-    return ((final_corpus_bigrams.count(bigram) + 1)/(final_corpus.count(bigram[0]) + V))
+    # return ((final_corpus_bigrams.count(bigram) + 1)/(final_corpus.count(bigram[0]) + V))
+    return ((math.log(final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V)))
 
 def estimateNextWordProbability(sentence, unigrams, bigrams, bigrams_probs, unigrams_probs ):
     results = {}
@@ -90,7 +91,7 @@ def estimateSentenceProbabilityLS(sentence, bigramed_sentence, unigrams, bigrams
 #Load Corpus and compute total bigrams
 print ("Loading Corpus")
 # corpus = open('europarliamentENG.en', 'r').read()
-corpus = codecs.open(r'C:\Users\Konstantinos\Documents\GitHub\NLP\Corpus\europarl-v7.fr-en.en', 'r', encoding='utf-8', errors='ignore').read()
+corpus = codecs.open(r'C:\Users\Konstantinos\OneDrive\Documents\PyCharmProjectsCloud\NLP\Corpus\europarl-v7.fr-en.en', 'r', encoding='utf-8', errors='ignore').read()
 print ("Corpus loaded with success!!! Length: ", len(corpus))
 
 #Initialize tokenization method
@@ -98,7 +99,7 @@ tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
 print ("Processing corpus... please wait!")
 corpus = corpus.lower()
 corpus = tools.remove_punc(corpus)
-tokenized_corpus = tknzr.tokenize(corpus[0:1000000])
+tokenized_corpus = tknzr.tokenize(corpus[0:100000])
 
 #Replace words that appear less than 10 times in corpus
 temp_counter = Counter(tokenized_corpus)
@@ -124,7 +125,8 @@ for unigram in V:
         unigrams_probs[i] = calculateUnigramProbLS(unigram, tokenized_corpus, len(V) - 1)
     i = i + 1
 
-f = open('UnigramsProbabilities.txt', 'w')
+f = open('UnigramsLogProbabilities.txt', 'w')
+
 i = 0;
 for unigram in V:
    # print ("P(",V[i],") = ", unigrams_probs[i])
@@ -144,7 +146,7 @@ for bigram in bigrams:
         bigrams_probs[i] = calculateBigramProbLS(bigram, tokenized_corpus, final_corpus_bigrams, len(V) - 1)
     i = i + 1
 
-f = open('BigramsProbabilities.txt', 'w')
+f = open('BigramsLogProbabilities.txt', 'w')
 i = 0
 for bigram in bigrams:
     #print("P(", bigram, ") = ", bigrams_probs[i])

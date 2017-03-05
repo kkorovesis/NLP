@@ -99,7 +99,7 @@ def estimateSentenceTrigramsProbabilityLS(sentence, trigramed_sentence, unigrams
 #Load Corpus and compute total bigrams
 print ("Loading Corpus")
 # corpus = open('europarliamentENG.en', 'r').read()
-corpus = codecs.open(r'C:\Users\Konstantinos\Documents\GitHub\NLP\Corpus\europarl-v7.fr-en.en', 'r', encoding='utf-8', errors='ignore').read()
+corpus = codecs.open(r'C:\Users\Konstantinos\OneDrive\Documents\PyCharmProjectsCloud\NLP\Corpus\europarl-v7.fr-en.en', 'r', encoding='utf-8', errors='ignore').read()
 corpus = tools.remove_punc(corpus)
 tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
 tokenized_corpus = tknzr.tokenize(corpus[0:10000])
