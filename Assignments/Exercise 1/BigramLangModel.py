@@ -13,13 +13,13 @@ def split_sequence(sequence, words):
 
 def calculateUnigramProbLS(unigram, tokenized_corpus,  V):
     # return ((tokenized_corpus.count(unigram) + 1)/(len(tokenized_corpus) + V))
-    return ((math.log(tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V)))
+    return ((math.log((tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V))))
 
 
 
 def calculateBigramProbLS(bigram, final_corpus, final_corpus_bigrams, V):
     # return ((final_corpus_bigrams.count(bigram) + 1)/(final_corpus.count(bigram[0]) + V))
-    return ((math.log(final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V)))
+    return ((math.log((final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V))))
 
 def estimateNextWordProbability(sentence, unigrams, bigrams, bigrams_probs, unigrams_probs ):
     results = {}
@@ -99,7 +99,7 @@ tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
 print ("Processing corpus... please wait!")
 corpus = corpus.lower()
 corpus = tools.remove_punc(corpus)
-tokenized_corpus = tknzr.tokenize(corpus[0:100000])
+tokenized_corpus = tknzr.tokenize(corpus[0:1000000])
 
 #Replace words that appear less than 10 times in corpus
 temp_counter = Counter(tokenized_corpus)
@@ -149,10 +149,9 @@ for bigram in bigrams:
 f = open('BigramsLogProbabilities.txt', 'w')
 i = 0
 for bigram in bigrams:
-    #print("P(", bigram, ") = ", bigrams_probs[i])
+    print("P(", bigram, ") = ", bigrams_probs[i])
     f.write("P(" + str(bigram) + ") = " + str(bigrams_probs[i]) + "\n")
     i = i + 1
-
 
 sentence = input("Please insert a sentence to test the Bigram Model: \n")
 sentence = sentence.lower()
