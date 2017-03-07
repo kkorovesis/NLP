@@ -1,9 +1,8 @@
 ######################################################### IMPORTS #########################################################
-import nltk, re, codecs, tools,  math
+import nltk, re, codecs, tools, math
 from nltk.tokenize import TweetTokenizer
 from collections import Counter
 
-import math
 
 ######################################################### FUNCTIONS #########################################################
 
@@ -14,7 +13,6 @@ def split_sequence(sequence, words):
 def calculateUnigramProbLS(unigram, tokenized_corpus,  V):
     # return ((tokenized_corpus.count(unigram) + 1)/(len(tokenized_corpus) + V))
     return ((math.log((tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V))))
-
 
 
 def calculateBigramProbLS(bigram, final_corpus, final_corpus_bigrams, V):
@@ -166,3 +164,4 @@ elif len(seq1_words) >= 2:
     bigramed_sentence = list(nltk.ngrams(seq1_words, 2))
     estimateSentenceProbabilityLS(sentence, bigramed_sentence, V, bigrams, bigrams_probs, unigrams_probs)
     estimateNextWordProbability(seq1_words, V, bigrams, bigrams_probs, unigrams_probs)
+
