@@ -87,7 +87,6 @@ def estimateSentenceProbabilityLS(sentence, bigramed_sentence, unigrams, bigrams
     print("P(", sentence, ") = ", Probability)
 
 def estimateLanguageCrossEntropy(bigrams, bigrams_probs):
-    Slog = 0
     # first_bigram = bigrams[0]
     # first_word = first_bigram[0]
     # if first_word != "qwerty":
@@ -96,15 +95,24 @@ def estimateLanguageCrossEntropy(bigrams, bigrams_probs):
     #         if word == first_word:
     #             Slog = Slog + log(unigrams_probs[i] , 2)
     #         i = i + 1
+    # for bigram in bigrams:
+    #     if not re.search("qwerty", str(bigram)):
+    #         i = 0
+    #         Slog =+ log(bigrams_probs[i] , 2)
+    #     i = i + 1
+    # print ("H(m) =",Slog," / ",len(bigrams)," = ",-(Slog/len(bigrams)))
+
+    Slog = 0
     i = 0
     for bigram in bigrams:
         if not re.search("qwerty", str(bigram)):
-            i = 0
-            Slog =+ log(bigrams_probs[i] , 2)
-        i = i + 1
-    print ("H(m) = ",-(Slog/len(bigrams)))
+            Slog += log(bigrams_probs[i], 2)
+    Slog = -(1.0 / len(bigrams)) * Slog
 
-######################################################### MAIN SCRIPT #########################################################
+    print("Language Model cross entropy for bigrams: " + str(Slog))
+
+
+######################################################### MAIN SCRIPT ################################################
 
 
 #Load Corpus and compute total bigrams
