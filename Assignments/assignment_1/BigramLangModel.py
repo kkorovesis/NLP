@@ -97,7 +97,7 @@ tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
 print ("Processing corpus... please wait!")
 corpus = corpus.lower()
 corpus = tools.remove_punc(corpus)
-tokenized_corpus = tknzr.tokenize(corpus[0:1000000])
+tokenized_corpus = tknzr.tokenize(corpus[0:100000])
 
 #Replace words that appear less than 10 times in corpus
 temp_counter = Counter(tokenized_corpus)
@@ -123,7 +123,7 @@ for unigram in V:
         unigrams_probs[i] = calculateUnigramProbLS(unigram, tokenized_corpus, len(V) - 1)
     i = i + 1
 
-f = open('UnigramsLogProbabilities.txt', 'w')
+f = open(r'output_files\UnigramsLogProbabilities.txt', 'w')
 
 i = 0;
 for unigram in V:
@@ -144,7 +144,7 @@ for bigram in bigrams:
         bigrams_probs[i] = calculateBigramProbLS(bigram, tokenized_corpus, final_corpus_bigrams, len(V) - 1)
     i = i + 1
 
-f = open('BigramsLogProbabilities.txt', 'w')
+f = open(r'output_files\BigramsLogProbabilities.txt', 'w')
 i = 0
 for bigram in bigrams:
     print("P(", bigram, ") = ", bigrams_probs[i])
