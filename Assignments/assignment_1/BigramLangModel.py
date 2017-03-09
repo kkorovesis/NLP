@@ -19,11 +19,11 @@ def calculateUnigramProbLS(unigram, tokenized_corpus,  V):
 def calculateBigramProbLS(bigram, final_corpus, final_corpus_bigrams, V):
     return (final_corpus_bigrams.count(bigram) + 1)/(final_corpus.count(bigram[0]) + V)
 
-def calculateUnigramLogProbLS(unigram, tokenized_corpus,  V):
-    return log((tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V))
-
-def calculateBigramLogProbLS(bigram, final_corpus, final_corpus_bigrams, V):
-    return log((final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V))
+# def calculateUnigramLogProbLS(unigram, tokenized_corpus,  V):
+#     return log((tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V))
+#
+# def calculateBigramLogProbLS(bigram, final_corpus, final_corpus_bigrams, V):
+#     return log((final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V))
 
 def estimateNextWordProbability(sentence, unigrams, bigrams, bigrams_probs, unigrams_probs ):
     results = {}
@@ -66,7 +66,7 @@ def estimateNextWordProbability(sentence, unigrams, bigrams, bigrams_probs, unig
         else:
             print("Could not predict the next word for your given sentece...Does your word exists?")
 
-#Markov Assumption
+# Markov Assumption
 def estimateSentenceProbabilityLS(sentence, bigramed_sentence, unigrams, bigrams, bigrams_probs, unigrams_probs):
     Probability = 1
     first_bigram = bigramed_sentence[0]
@@ -76,47 +76,30 @@ def estimateSentenceProbabilityLS(sentence, bigramed_sentence, unigrams, bigrams
         for unigram in unigrams:
             if unigram == first_unigram:
                 Probability = Probability * unigrams_probs[i]
-            i = i + 1
+            i = + 1
     for bigram in bigramed_sentence:
         if not re.search("qwerty", str(bigram)):
             i = 0
             for bb in bigrams:
                 if bigram == bb:
                     Probability = Probability * bigrams_probs[i]
-                i = i + 1
+                i=+ 1
     print("P(", sentence, ") = ", Probability)
 
+# Cross-entropy Calculator
 def estimateLanguageCrossEntropy(bigrams, bigrams_probs):
-    # first_bigram = bigrams[0]
-    # first_word = first_bigram[0]
-    # if first_word != "qwerty":
-    #     i = 0;
-    #     for word in V:
-    #         if word == first_word:
-    #             Slog = Slog + log(unigrams_probs[i] , 2)
-    #         i = i + 1
-    # for bigram in bigrams:
-    #     if not re.search("qwerty", str(bigram)):
-    #         i = 0
-    #         Slog =+ log(bigrams_probs[i] , 2)
-    #     i = i + 1
-    # print ("H(m) =",Slog," / ",len(final_corpus_bigrams)," = ",-(Slog/len(final_corpus_bigrams)))
-
     Slog = 0
     i = 0
-
     for bigram in bigrams:
         if not re.search("qwerty", str(bigram)):
             Slog += log(bigrams_probs[i], 2)
-        i = i + 1
-    print("Slog:",Slog)
+        i=+1
     Slog = -(1.0 / len(final_corpus_bigrams)) * Slog
 
-    print("Language Model cross entropy for bigrams: " + str(Slog))
+    return Slog
 
 
 ######################################################### MAIN SCRIPT ################################################
-
 
 #Load Corpus and compute total bigrams
 print ("Loading Corpus")
@@ -135,7 +118,7 @@ temp_counter = Counter(tokenized_corpus)
 x = [word if temp_counter[word] >= 10 else 'qwerty' for word in tokenized_corpus]
 x = ' '.join(x)
 
-print ("Training Bigram language Model...please wait...")
+print ("Training Bigram language Model... please wait...")
 tokenized_corpus = tknzr.tokenize(x)
 corpus_bigrams = list(nltk.ngrams(tokenized_corpus, 2))
 #print (corpus_bigrams)
@@ -179,45 +162,42 @@ for bigram in bigrams:
     f.write("P(" + str(bigram) + ") = " + str(bigrams_probs[i]) + "\n")
     i = i + 1
 
-####Logarithic Probabilities#####
-
-#Compute the log probabilities for every Unigram!
-unigrams_logprobs = [0.0] * len(V)
-
-i = 0
-for unigram in V:
-    if unigram != "qwerty":
-        unigrams_logprobs[i] = calculateUnigramLogProbLS(unigram, tokenized_corpus, len(V) - 1)
-    i = i + 1
-
-f = open(r'output_files\UnigramsLogProbabilities.txt', 'w')
-i = 0;
-for unigram in V:
-   # print ("P(",V[i],") = ", unigrams_probs[i])
-    f.write("P(" + (V[i]) + ") = " + str(unigrams_probs[i]) + "\n")
-    i = i + 1
-f.close()
-
-#Compute the log probabilities for every Bigram!
-final_corpus_bigrams = list(nltk.ngrams(tokenized_corpus, 2))
-bigrams = sorted(set(final_corpus_bigrams))
-bigrams_logprobs = [0.0] * len(bigrams)
-
-
-i = 0
-for bigram in bigrams:
-    if not re.search("qwerty", str(bigram)):
-        bigrams_logprobs[i] = calculateBigramLogProbLS(bigram, tokenized_corpus, final_corpus_bigrams, len(V) - 1)
-    i = i + 1
-
-f = open(r'output_files\BigramsLogProbabilities.txt', 'w')
-i = 0
-for bigram in bigrams:
-    #print("P(", bigram, ") = ", bigrams_probs[i])
-    f.write("P(" + str(bigram) + ") = " + str(bigrams_probs[i]) + "\n")
-    i = i + 1
-
-
+# ####Logarithic Probabilities#####
+#
+# #Compute the log probabilities for every Unigram!
+# unigrams_log_probs = [0.0] * len(V)
+#
+# i = 0
+# for unigram in V:
+#     if unigram != "qwerty":
+#         unigrams_log_probs[i] = calculateUnigramLogProbLS(unigram, tokenized_corpus, len(V) - 1)
+#     i = i + 1
+#
+# f = open(r'output_files\UnigramsLogProbabilities.txt', 'w')
+# i = 0;
+# for unigram in V:
+#    # print ("P(",V[i],") = ", unigrams_probs[i])
+#     f.write("P(" + (V[i]) + ") = " + str(unigrams_log_probs[i]) + "\n")
+#     i = i + 1
+# f.close()
+#
+# #Compute the log probabilities for every Bigram!
+# final_corpus_bigrams = list(nltk.ngrams(tokenized_corpus, 2))
+# bigrams = sorted(set(final_corpus_bigrams))
+# bigrams_log_probs = [0.0] * len(bigrams)
+#
+# i = 0
+# for bigram in bigrams:
+#     if not re.search("qwerty", str(bigram)):
+#         bigrams_log_probs[i] = calculateBigramLogProbLS(bigram, tokenized_corpus, final_corpus_bigrams, len(V) - 1)
+#     i = i + 1
+#
+# f = open(r'output_files\BigramsLogProbabilities.txt', 'w')
+# i = 0
+# for bigram in bigrams:
+#     #print("P(", bigram, ") = ", bigrams_probs[i])
+#     f.write("P(" + str(bigram) + ") = " + str(bigrams_log_probs[i]) + "\n")
+#     i = i + 1
 
 # Estimating next word
 sentence = input("Please insert a sentence to test the Bigram Model: \n")
@@ -236,6 +216,6 @@ elif len(seq1_words) >= 2:
     estimateSentenceProbabilityLS(sentence, bigramed_sentence, V, bigrams, bigrams_probs, unigrams_probs)
     estimateNextWordProbability(seq1_words, V, bigrams, bigrams_probs, unigrams_probs)
 
-
 #Compute Cross-Entropy
-estimateLanguageCrossEntropy(bigrams, bigrams_probs)
+print("Language Model cross entropy for bigrams: " + str(estimateLanguageCrossEntropy(bigrams, bigrams_probs)))
+
