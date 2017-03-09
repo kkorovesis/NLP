@@ -14,16 +14,16 @@ def split_sequence(sequence, words):
     return words
 
 def calculateUnigramProbLS(unigram, tokenized_corpus,  V):
-    return ((tokenized_corpus.count(unigram) + 1)/(len(tokenized_corpus) + V))
+    return (tokenized_corpus.count(unigram) + 1)/(len(tokenized_corpus) + V)
 
 def calculateBigramProbLS(bigram, final_corpus, final_corpus_bigrams, V):
-    return ((final_corpus_bigrams.count(bigram) + 1)/(final_corpus.count(bigram[0]) + V))
+    return (final_corpus_bigrams.count(bigram) + 1)/(final_corpus.count(bigram[0]) + V)
 
 def calculateUnigramLogProbLS(unigram, tokenized_corpus,  V):
-    return ((log((tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V))))
+    return log((tokenized_corpus.count(unigram) + 1) / (len(tokenized_corpus) + V))
 
 def calculateBigramLogProbLS(bigram, final_corpus, final_corpus_bigrams, V):
-    return ((log((final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V))))
+    return log((final_corpus_bigrams.count(bigram) + 1) / (final_corpus.count(bigram[0]) + V))
 
 def estimateNextWordProbability(sentence, unigrams, bigrams, bigrams_probs, unigrams_probs ):
     results = {}
@@ -100,14 +100,17 @@ def estimateLanguageCrossEntropy(bigrams, bigrams_probs):
     #         i = 0
     #         Slog =+ log(bigrams_probs[i] , 2)
     #     i = i + 1
-    # print ("H(m) =",Slog," / ",len(bigrams)," = ",-(Slog/len(bigrams)))
+    # print ("H(m) =",Slog," / ",len(final_corpus_bigrams)," = ",-(Slog/len(final_corpus_bigrams)))
 
     Slog = 0
     i = 0
+
     for bigram in bigrams:
         if not re.search("qwerty", str(bigram)):
             Slog += log(bigrams_probs[i], 2)
-    Slog = -(1.0 / len(bigrams)) * Slog
+        i = i + 1
+    print("Slog:",Slog)
+    Slog = -(1.0 / len(final_corpus_bigrams)) * Slog
 
     print("Language Model cross entropy for bigrams: " + str(Slog))
 
