@@ -69,7 +69,7 @@ def estimateNextWordProbability(sentence, unigrams, bigrams, bigrams_probs, unig
 # Markov Assumption
 def estimateSentenceProbabilityLS(sentence, bigramed_sentence, unigrams, bigrams, bigrams_probs, unigrams_probs):
     Probability = 1
-    first_bigram = bigramed_sentence[0]
+    first_bigram = bigramed_sentence[0]  ##Need to make it work for full sentences and not only for one bigram##
     first_unigram = first_bigram[0]
     if first_unigram != "qwerty":
         i = 0;
@@ -118,13 +118,11 @@ temp_counter = Counter(tokenized_corpus)
 x = [word if temp_counter[word] >= 10 else 'qwerty' for word in tokenized_corpus]
 x = ' '.join(x)
 
-print ("Training Bigram language Model... please wait...")
 tokenized_corpus = tknzr.tokenize(x)
-corpus_bigrams = list(nltk.ngrams(tokenized_corpus, 2))
-#print (corpus_bigrams)
-
 #Create Vocabulary
 V = sorted(set(tokenized_corpus))
+
+print ("Training Bigram language Model... please wait...")
 
 #Compute the probabilities for every Unigram!
 unigrams_probs = [0.0] * len(V)
@@ -147,7 +145,6 @@ f.close()
 final_corpus_bigrams = list(nltk.ngrams(tokenized_corpus, 2))
 bigrams = sorted(set(final_corpus_bigrams))
 bigrams_probs = [0.0] * len(bigrams)
-
 
 i = 0
 for bigram in bigrams:
@@ -199,6 +196,22 @@ for bigram in bigrams:
 #     f.write("P(" + str(bigram) + ") = " + str(bigrams_log_probs[i]) + "\n")
 #     i = i + 1
 
+# Languge Model Test
+input_sentence = input("Please insert a sentence to test the Bigram Model: \n")
+print ("Processing Input Sentece... please wait!")
+
+# Initialize tokenization method
+input_sentence = input_sentence.lower()
+input_sentence = remove_punc(input_sentence)
+tknzr = TweetTokenizer(strip_handles=True, reduce_len=True)
+tokenized_input_sentence = tknzr.tokenize(input_sentence)
+input_sentence_bigrams = list(nltk.ngrams(tokenized_input_sentence, 2))
+# print (input_sentence_bigrams)
+
+print ("Testing Model...")
+print(input_sentence_bigrams)
+estimateSentenceProbabilityLS(input_sentence, input_sentence_bigrams, V, bigrams, bigrams_probs, unigrams_probs)
+
 # Estimating next word
 sentence = input("Please insert a sentence to test the Bigram Model: \n")
 sentence = sentence.lower()
@@ -213,7 +226,7 @@ if len(seq1_words) == 1:
     estimateNextWordProbability(seq1_words, V, bigrams, bigrams_probs, unigrams_probs )
 elif len(seq1_words) >= 2:
     bigramed_sentence = list(nltk.ngrams(seq1_words, 2))
-    estimateSentenceProbabilityLS(sentence, bigramed_sentence, V, bigrams, bigrams_probs, unigrams_probs)
+    estimateSentenceProbabilityLS(bigramed_sentence, V, bigrams, bigrams_probs, unigrams_probs)
     estimateNextWordProbability(seq1_words, V, bigrams, bigrams_probs, unigrams_probs)
 
 #Compute Cross-Entropy
