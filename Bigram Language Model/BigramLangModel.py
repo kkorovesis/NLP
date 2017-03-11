@@ -213,7 +213,7 @@ print(input_sentence_bigrams)
 estimateSentenceProbabilityLS(input_sentence, input_sentence_bigrams, V, bigrams, bigrams_probs, unigrams_probs)
 
 # Estimating next word
-sentence = input("Please insert a sentence to test the Bigram Model: \n")
+sentence = input("Please insert a sentence to find next word: \n")
 sentence = sentence.lower()
 print ("Estimating Probability of given sentence and possible next words...")
 
@@ -226,7 +226,7 @@ if len(seq1_words) == 1:
     estimateNextWordProbability(seq1_words, V, bigrams, bigrams_probs, unigrams_probs )
 elif len(seq1_words) >= 2:
     bigramed_sentence = list(nltk.ngrams(seq1_words, 2))
-    estimateSentenceProbabilityLS(bigramed_sentence, V, bigrams, bigrams_probs, unigrams_probs)
+    estimateSentenceProbabilityLS(sentence, bigramed_sentence, V, bigrams, bigrams_probs, unigrams_probs)
     estimateNextWordProbability(seq1_words, V, bigrams, bigrams_probs, unigrams_probs)
 
 #Compute Cross-Entropy
