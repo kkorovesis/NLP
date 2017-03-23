@@ -4,6 +4,8 @@ from math import log
 from nltk.tokenize import TweetTokenizer
 from collections import Counter
 
+
+
 ######################################################### FUNCTIONS #########################################################
 
 def remove_punc(text):
